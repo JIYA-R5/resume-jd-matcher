@@ -1,0 +1,6 @@
+Second-year engineering student interested in web development.
+Built a dashboard using React, TypeScript and Tailwind CSS.
+Developed a backend with Supabase and PostgreSQL for authentication and data storage.
+Created a Python script to analyze network traffic and detect port scans.
+Worked in a team of four on hackathon projects and managed code on GitHub.
+Deployed web applications on Vercel.

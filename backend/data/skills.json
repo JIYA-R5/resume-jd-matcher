@@ -1,0 +1,51 @@
+{
+    "Python": [
+        "python3"
+    ],
+    "JavaScript": [
+        "js",
+        "ecmascript"
+    ],
+    "TypeScript": [
+        "ts"
+    ],
+    "React": [
+        "reactjs",
+        "react.js"
+    ],
+    "Node.js": [
+        "nodejs",
+        "node"
+    ],
+    "SQL": [
+        "mysql",
+        "postgresql",
+        "postgres"
+    ],
+    "Docker": [
+        "containerization"
+    ],
+    "REST API": [
+        "rest apis",
+        "restful"
+    ],
+    "Git": [
+        "github",
+        "gitlab"
+    ],
+    "Machine Learning": [
+        "ml"
+    ],
+    "FastAPI": [],
+    "Supabase": [],
+    "Tailwind CSS": [
+        "tailwind"
+    ],
+    "AWS": [
+        "amazon web services"
+    ],
+    "C": [],
+    "C++": [
+        "cpp"
+    ]
+}

@@ -1,0 +1,5 @@
+We are hiring a Full Stack Developer.
+Build REST APIs using Python and FastAPI.
+Develop responsive user interfaces with React and TypeScript.
+Experience with PostgreSQL and Docker is a plus.
+Strong communication and teamwork skills.

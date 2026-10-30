@@ -4,3 +4,4 @@ Developed a backend with Supabase and PostgreSQL for authentication and data sto
 Created a Python script to analyze network traffic and detect port scans.
 Worked in a team of four on hackathon projects and managed code on GitHub.
 Deployed web applications on Vercel.
+Built REST APIs using Python and Flask for a hackathon project.

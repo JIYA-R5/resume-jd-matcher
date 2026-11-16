@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume Matcher</title>
+<style>
+  :root {
+    --bg: #eef1f4;
+    --surface: #ffffff;
+    --ink: #101c2c;
+    --muted: #5b6878;
+    --line: #d5dbe3;
+    --accent: #2b4eff;
+    --accent-ink: #ffffff;
+    --good: #17794f;
+    --good-bg: #e2f4ea;
+    --bad: #b3322f;
+    --bad-bg: #fbe7e6;
+    --warn: #9a5b00;
+    --track: #e3e8ee;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1520;
+      --surface: #16202e;
+      --ink: #e8edf4;
+      --muted: #9aa8ba;
+      --line: #2b394b;
+      --accent: #7f98ff;
+      --accent-ink: #0e1520;
+      --good: #6fd3a2;
+      --good-bg: #123325;
+      --bad: #ff9a96;
+      --bad-bg: #3b1b1b;
+      --warn: #f0b45a;
+      --track: #243246;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 60px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  h1 { font-size: 1.6rem; margin: 0; letter-spacing: -0.01em; }
+  .status { font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+  .dot.ok { background: var(--good); }
+  .dot.fail { background: var(--bad); }
+
+  .layout { display: grid; grid-template-columns: 380px 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 880px) { .layout { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
+  .panel h2 { font-size: 1.05rem; margin: 0 0 14px; }
+  label.field { display: block; font-weight: 600; font-size: 0.92rem; margin: 14px 0 6px; }
+  label.field:first-of-type { margin-top: 0; }
+
+  .drop {
+    display: block; border: 1.5px dashed var(--line); border-radius: 8px; padding: 14px;
+    text-align: center; color: var(--muted); cursor: pointer; font-size: 0.92rem;
+  }
+  .drop:hover, .drop:focus-within { border-color: var(--accent); color: var(--ink); }
+  .drop input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .drop strong { color: var(--ink); }
+
+  textarea {
+    width: 100%; min-height: 220px; resize: vertical; padding: 10px 12px;
+    background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 8px;
+    font: inherit; font-size: 0.93rem;
+  }
+  textarea:focus, button:focus-visible, .drop:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  button.primary {
+    width: 100%; margin-top: 16px; padding: 12px; border: 0; border-radius: 8px;
+    background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  button.primary:disabled { opacity: 0.6; cursor: wait; }
+
+  .msg { margin-top: 14px; padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; }
+  .msg.error { background: var(--bad-bg); color: var(--bad); }
+  .msg.info { background: var(--track); color: var(--muted); }
+
+  .empty { color: var(--muted); padding: 40px 10px; text-align: center; }
+
+  .hero { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+  .ring { position: relative; width: 170px; height: 170px; flex: none; }
+  .ring svg { transform: rotate(-90deg); }
+  .ring .num { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .ring .num b { font-size: 2.6rem; line-height: 1; }
+  .ring .num span { font-size: 0.8rem; color: var(--muted); }
+  .hero-text { flex: 1; min-width: 240px; }
+  .verdict { font-size: 1.15rem; font-weight: 600; margin: 0 0 10px; }
+  .sub { display: flex; gap: 22px; flex-wrap: wrap; color: var(--muted); font-size: 0.9rem; }
+  .sub b { display: block; color: var(--ink); font-size: 1.2rem; }
+
+  .block { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .block h3 { font-size: 1rem; margin: 0 0 10px; }
+  .hint { color: var(--muted); font-size: 0.85rem; margin: -4px 0 10px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; }
+  .chip.good { background: var(--good-bg); color: var(--good); }
+  .chip.bad { background: var(--bad-bg); color: var(--bad); }
+  .none { color: var(--muted); font-size: 0.88rem; }
+
+  .cat { display: grid; grid-template-columns: 150px 1fr; gap: 10px 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .cat:last-child { border-bottom: 0; }
+  .cat > b { font-size: 0.92rem; }
+  @media (max-width: 560px) { .cat { grid-template-columns: 1fr; } }
+  .cat .chips + .chips { margin-top: 6px; }
+
+  .role { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .role:last-child { border-bottom: 0; }
+  .role-top { display: flex; justify-content: space-between; gap: 10px; font-weight: 600; }
+  .bar { height: 8px; background: var(--track); border-radius: 99px; margin: 6px 0 8px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+  .role small { color: var(--muted); display: block; }
+
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 620px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.sim { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .tag { font-weight: 700; }
+  .tag.good { color: var(--good); }
+  .tag.bad { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Resume Matcher</h1>
+    <div class="status" id="status"><span class="dot"></span><span>Checking server...</span></div>
+  </header>
+
+  <div class="layout">
+    <section class="panel" aria-label="Inputs">
+      <h2>Check a resume against a job</h2>
+
+      <label class="field" for="resume">Resume (PDF, DOCX or TXT)</label>
+      <label class="drop" id="drop">
+        <input type="file" id="resume" accept=".pdf,.docx,.txt">
+        <span id="fileName"><strong>Choose a file</strong> or drop it here</span>
+      </label>
+
+      <label class="field" for="jd">Job description</label>
+      <textarea id="jd" placeholder="Paste the full job description here"></textarea>
+
+      <button class="primary" id="go" type="button">Check match</button>
+      <div id="formMsg"></div>
+    </section>
+
+    <section class="panel" id="result" aria-live="polite">
+      <div class="empty">Add a resume and a job description, then select Check match.</div>
+    </section>
+  </div>
+</div>
+
+<script>
+  // The backend address. Change this if you run uvicorn on another port.
+  const API = "http://127.0.0.1:8000";
+
+  const $ = (id) => document.getElementById(id);
+
+  // Build elements safely (resume text is never inserted as HTML).
+  function el(tag, attrs, ...kids) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k in attrs) {
+      if (k === "class") n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    for (const kid of kids) {
+      if (kid == null) continue;
+      n.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+    }
+    return n;
+  }
+
+  function chips(list, kind, emptyText) {
+    if (!list || !list.length) return el("span", { class: "none" }, emptyText);
+    const box = el("div", { class: "chips" });
+    list.forEach((s) => box.append(el("span", { class: "chip " + kind }, s)));
+    return box;
+  }
+
+  // ---- server status ----
+  async function checkServer() {
+    const dot = $("status").querySelector(".dot");
+    const text = $("status").querySelector("span:last-child");
+    try {
+      const r = await fetch(API + "/health");
+      if (!r.ok) throw new Error();
+      dot.className = "dot ok";
+      text.textContent = "Server connected";
+    } catch (e) {
+      dot.className = "dot fail";
+      text.textContent = "Server not reachable at " + API;
+    }
+  }
+  checkServer();
+
+  // ---- file picker ----
+  let file = null;
+  function setFile(f) {
+    file = f;
+    $("fileName").replaceChildren(f ? el("strong", null, f.name) : "Choose a file or drop it here");
+  }
+  $("resume").addEventListener("change", (e) => setFile(e.target.files[0] || null));
+  const drop = $("drop");
+  ["dragover", "dragenter"].forEach((ev) => drop.addEventListener(ev, (e) => e.preventDefault()));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+  });
+
+  // ---- submit ----
+  function formMessage(kind, text) {
+    $("formMsg").replaceChildren(text ? el("div", { class: "msg " + kind }, text) : "");
+  }
+
+  $("go").addEventListener("click", async () => {
+    const jd = $("jd").value.trim();
+    if (!file) return formMessage("error", "Choose a resume file first.");
+    if (jd.length < 30) return formMessage("error", "Paste a longer job description (at least 30 characters).");
+
+    const body = new FormData();
+    body.append("resume", file);
+    body.append("jd_text", jd);
+
+    $("go").disabled = true;
+    $("go").textContent = "Checking...";
+    formMessage("info", "Analysing. The first run can take a few seconds while the model loads.");
+
+    try {
+      const r = await fetch(API + "/match", { method: "POST", body });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const detail = typeof data.detail === "string" ? data.detail : "The server returned an error (" + r.status + ").";
+        throw new Error(detail);
+      }
+      formMessage("", "");
+      render(data);
+    } catch (err) {
+      const unreachable = err instanceof TypeError;
+      formMessage("error", unreachable
+        ? "Cannot reach the server at " + API + ". Start uvicorn, and open this page at http://localhost:5173 (not by double-clicking the file)."
+        : err.message);
+    } finally {
+      $("go").disabled = false;
+      $("go").textContent = "Check match";
+    }
+  });
+
+  // ---- results ----
+  function scoreColor(s) {
+    if (s >= 75) return getComputedStyle(document.documentElement).getPropertyValue("--good");
+    if (s >= 50) return getComputedStyle(document.documentElement).getPropertyValue("--warn");
+    return getComputedStyle(document.documentElement).getPropertyValue("--bad");
+  }
+
+  function ring(score) {
+    const R = 74, C = 2 * Math.PI * R;
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("width", "170");
+    svg.setAttribute("height", "170");
+    svg.setAttribute("viewBox", "0 0 170 170");
+    const mk = (stroke, dash) => {
+      const c = document.createElementNS(ns, "circle");
+      c.setAttribute("cx", "85"); c.setAttribute("cy", "85"); c.setAttribute("r", String(R));
+      c.setAttribute("fill", "none"); c.setAttribute("stroke-width", "12");
+      c.setAttribute("stroke", stroke);
+      if (dash != null) {
+        c.setAttribute("stroke-linecap", "round");
+        c.setAttribute("stroke-dasharray", dash + " " + C);
+      }
+      return c;
+    };
+    svg.append(mk(getComputedStyle(document.documentElement).getPropertyValue("--track")));
+    svg.append(mk(scoreColor(score), (Math.max(0, Math.min(100, score)) / 100) * C));
+    return svg;
+  }
+
+  function render(d) {
+    const out = $("result");
+    out.replaceChildren();
+
+    // Hero: score ring + verdict
+    const hero = el("div", { class: "hero" },
+      el("div", { class: "ring" }, ring(d.score), el("div", { class: "num" }, el("div", null, el("b", null, Math.round(d.score)), el("br"), el("span", null, "out of 100")))),
+      el("div", { class: "hero-text" },
+        el("p", { class: "verdict" }, d.verdict || "Match score ready."),
+        el("div", { class: "sub" },
+          el("div", null, el("b", null, d.semantic_score + "%"), "Meaning match"),
+          el("div", null, el("b", null, d.skill_coverage == null ? "n/a" : d.skill_coverage + "%"), "Skills covered")
+        )
+      )
+    );
+    out.append(hero);
+
+    // Skills
+    out.append(el("div", { class: "block" },
+      el("h3", null, "Skills in the job description"),
+      el("p", { class: "hint" }, "Found in your resume"),
+      chips(d.matched_skills, "good", "No skills from the job description were found in your resume."),
+      el("p", { class: "hint", style: "margin-top:14px" }, "Missing from your resume"),
+      chips(d.missing_skills, "bad", "Nothing missing. Your resume covers every skill listed.")
+    ));
+
+    // Category feedback
+    const cats = d.category_feedback || {};
+    const catNames = Object.keys(cats);
+    if (catNames.length) {
+      const b = el("div", { class: "block" }, el("h3", null, "Where the gaps are"));
+      catNames.forEach((name) => {
+        b.append(el("div", { class: "cat" },
+          el("b", null, name),
+          el("div", null,
+            chips(cats[name].matched, "good", "Nothing matched here"),
+            chips(cats[name].missing, "bad", "No gaps here")
+          )
+        ));
+      });
+      out.append(b);
+    }
+
+    // Role suggestions
+    const roles = d.role_suggestions || [];
+    if (roles.length) {
+      const b = el("div", { class: "block" },
+        el("h3", null, "Roles your resume fits best"),
+        el("p", { class: "hint" }, "Based on the skills found in your resume, not on this job.")
+      );
+      roles.forEach((r) => {
+        const bar = el("div", { class: "bar" }, el("i", { style: "width:" + r.fit + "%" }));
+        b.append(el("div", { class: "role" },
+          el("div", { class: "role-top" }, el("span", null, r.role), el("span", null, r.fit + "% fit")),
+          bar,
+          el("small", null, "You have: " + (r.have.length ? r.have.join(", ") : "none of the core skills")),
+          el("small", null, "To add: " + (r.lacking.length ? r.lacking.join(", ") : "nothing"))
+        ));
+      });
+      out.append(b);
+    }
+
+    // Line-by-line
+    const rows = d.details || [];
+    if (rows.length) {
+      const tbody = el("tbody");
+      rows.forEach((x) => {
+        tbody.append(el("tr", null,
+          el("td", null, x.requirement),
+          el("td", null, x.best_resume_line),
+          el("td", { class: "sim" }, x.similarity.toFixed(2)),
+          el("td", null, el("span", { class: "tag " + (x.matched ? "good" : "bad") }, x.matched ? "Matched" : "Gap"))
+        ));
+      });
+      const table = el("table", null,
+        el("thead", null, el("tr", null,
+          el("th", null, "Job requirement"), el("th", null, "Closest line in your resume"),
+          el("th", null, "Similarity"), el("th", null, "Result"))),
+        tbody);
+      out.append(el("div", { class: "block" },
+        el("h3", null, "Line-by-line comparison"),
+        el("p", { class: "hint" }, "Each job requirement is compared with the most similar line in your resume."),
+        el("div", { class: "scroll" }, table)
+      ));
+    }
+  }
+</script>
+</body>
+</html>

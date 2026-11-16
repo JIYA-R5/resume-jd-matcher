@@ -21,4 +21,42 @@ PATTERNS = _build_patterns()
 
 
 def extract_skills(text: str) -> set[str]:
-    return {skill for skill, p in PATTERNS.items() if p.search(text)}
+    return {skill for skill, p in PATTERNS.items() if p.search(text)}# ---------- Role fit + category feedback ----------
+
+
+ROLE_PROFILES: dict[str, set[str]] = {
+    "Backend Developer": {"Python", "FastAPI", "Django", "SQL", "REST API", "Docker"},
+    "Frontend Developer": {"React", "JavaScript", "HTML", "CSS", "TypeScript"},
+    "Data Analyst": {"SQL", "Excel", "Python", "Pandas", "Power BI"},
+    "DevOps Engineer": {"Docker", "Kubernetes", "AWS", "CI/CD", "Linux"},
+}
+
+CATEGORIES: dict[str, set[str]] = {
+    "Languages": {"Python", "Java", "JavaScript", "TypeScript", "C++"},
+    "Frameworks": {"FastAPI", "Django", "Flask", "React", "Node.js"},
+    "Databases": {"SQL", "MySQL", "PostgreSQL", "MongoDB"},
+    "Cloud & DevOps": {"AWS", "Azure", "GCP", "Docker", "Kubernetes", "CI/CD"},
+    "Tools": {"Git", "Linux", "Excel", "Power BI"},
+}
+
+
+def suggest_roles(resume_skills: set[str]) -> list[dict]:
+    result = []
+    for role, required in ROLE_PROFILES.items():
+        common = resume_skills & required
+        result.append({
+            "role": role,
+            "fit": round(len(common) / len(required) * 100, 1),
+            "have": sorted(common),
+            "lacking": sorted(required - resume_skills),
+        })
+    return sorted(result, key=lambda r: -r["fit"])
+
+
+def group_by_category(matched: set[str], missing: set[str]) -> dict:
+    out = {}
+    for cat, members in CATEGORIES.items():
+        m, x = sorted(matched & members), sorted(missing & members)
+        if m or x:
+            out[cat] = {"matched": m, "missing": x}
+    return out

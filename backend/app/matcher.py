@@ -4,7 +4,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from .cleaner import clean_text, split_chunks
-from .skills import extract_skills
+from .skills import extract_skills, suggest_roles, group_by_category
 
 THRESHOLD = 0.45
 LOW, HIGH = 0.20, 0.70
@@ -47,8 +47,25 @@ def match(resume_text: str, jd_text: str) -> dict:
 
     final = semantic if coverage is None else 0.6 * semantic + 0.4 * coverage
 
+    # ---------- NEW: verdict + role suggestions + category feedback ----------
+    final_pct = round(final * 100, 1)
+    roles = suggest_roles(resume_skills)
+
+    if final_pct >= 75:
+        verdict = "Strong match. Apply with confidence."
+    elif final_pct >= 50:
+        verdict = f"Moderate match. Add or highlight: {', '.join(missing[:3]) or 'more relevant experience'}."
+    else:
+        verdict = (
+            f"Low match for this JD. Your profile fits better as: "
+            f"{roles[0]['role']} ({roles[0]['fit']}% fit)."
+        )
+
     return {
-        "score": round(final * 100, 1),
+        "score": final_pct,
+        "verdict": verdict,
+        "role_suggestions": roles[:3],
+        "category_feedback": group_by_category(set(matched), set(missing)),
         "semantic_score": round(semantic * 100, 1),
         "skill_coverage": None if coverage is None else round(coverage * 100, 1),
         "matched_skills": matched,

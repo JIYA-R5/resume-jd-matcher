@@ -236,7 +236,7 @@
 
     $("go").disabled = true;
     $("go").textContent = "Checking...";
-    formMessage("info", "Analysing. The first run can take a few seconds while the model loads.");
+    formMessage("info", "Analysing your resume against the job description...");
 
     try {
       const r = await fetch(API + "/match", { method: "POST", body });

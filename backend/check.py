@@ -1,5 +1,12 @@
-from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-m = SentenceTransformer("all-MiniLM-L6-v2")
-v = m.encode(["I know React", "Experience with frontend frameworks"], normalize_embeddings=True)
-print("Similarity:", float(v[0] @ v[1]))
+sentences = [
+    "I know React",
+    "Experience with frontend frameworks and React",
+]
+
+vec = TfidfVectorizer(stop_words="english")
+X = vec.fit_transform(sentences)
+sim = cosine_similarity(X[0:1], X[1:2])[0][0]
+print("TF-IDF Cosine Similarity:", round(float(sim), 4))

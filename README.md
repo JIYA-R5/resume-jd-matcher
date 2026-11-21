@@ -9,7 +9,7 @@
 
 Built for **freshers and first-time job seekers**. Upload your resume, paste a job description, and see where you stand *before* you apply.
 
-🔗 **[Live Demo](#)**
+🔗 **[Live Demo](https://matchresume-delta.vercel.app/)**
 
 ## What you see after one click
 
@@ -51,10 +51,6 @@ flowchart LR
 - My first version used `sentence-transformers`, but it was too heavy for free hosting (the project crossed 5 GB with `venv` and `node_modules`).
 - I replaced it with **TF-IDF + cosine similarity**, which is lightweight and runs on a 512 MB server.
 - Splitting React code into small components made adding new sections easy.
-
-live demo :https://matchresume-delta.vercel.app/
-Open `http://localhost:5173`
-
 ---
 
 Built by **Jiya Shah** · Computer Engineering student

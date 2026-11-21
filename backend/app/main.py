@@ -24,12 +24,12 @@ def root():
     }
 
 
-@app.get("/health")
+@app.get("/api/health")
 def health():
     return {"status": "ok"}
 
 
-@app.post("/match")
+@app.post("/api/match")
 async def match_endpoint(resume: UploadFile = File(...), jd_text: str = Form(...)):
     content = await resume.read()
     try:

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ScoreCard from "./components/ScoreCard";
 import ThemeToggle from "./components/ThemeToggle";
 
-
 const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 interface Metric {
@@ -268,6 +267,52 @@ function ResultSections({ result }: { result: Result }) {
   );
 }
 
+//glass reume card 
+function ResumePreview() {
+  return (
+    <div className="resume-scene">
+      <div className="resume-card">
+        <div className="resume-header">
+          <div className="resume-icon">📄</div>
+          <div className="resume-title">
+            <h3>My Resume</h3>
+            <span>resume.pdf</span>
+          </div>
+          <div className="live-badge">
+            <span className="live-dot"></span>
+            LIVE
+          </div>
+        </div>
+
+        <div className="resume-content">
+          <div className="resume-name"></div>
+          <div className="resume-role typing-text">Frontend Developer</div>
+          <div className="resume-divider"></div>
+
+          <div className="resume-section">SKILLS</div>
+          <div className="resume-line long"></div>
+          <div className="resume-line medium"></div>
+          <div className="resume-line short"></div>
+
+          <div className="resume-section">EXPERIENCE</div>
+          <div className="resume-line long"></div>
+          <div className="resume-line medium"></div>
+          <div className="resume-line long"></div>
+
+          <div className="resume-section">EDUCATION</div>
+          <div className="resume-line medium"></div>
+          <div className="resume-line short"></div>
+        </div>
+
+        <div className="scan-line"></div>
+      </div>
+
+      <div className="ai-label">✨ AI Resume Analysis</div>
+    </div>
+  );
+}
+
+
 //skillora 
 const WORD = "Skillora";
 const HEADLINE = "Know Your Match. Bridge Your Gaps. Get Career-Ready.";
@@ -307,7 +352,13 @@ function Landing({ onStart }: { onStart: () => void }) {
         </span>
       </p>
 
-      <button className="lp-btn" onClick={onStart}>Check my resume</button>
+      <div className="lp-row">
+        <div className="lp-side"><ResumePreview /></div>
+        <button className="lp-btn" onClick={onStart}>Check my resume</button>
+        <div className="lp-side" />
+      </div>
+
+
     </div>
   );
 }

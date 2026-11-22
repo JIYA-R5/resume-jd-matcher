@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ScoreCard from "./components/ScoreCard";
 import ThemeToggle from "./components/ThemeToggle";
 
+
 const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 interface Metric {
@@ -105,6 +106,32 @@ function Chips({ items, ok }: { items: string[]; ok?: boolean }) {
   );
 }
 
+function Ring({ done, total }: { done: number; total: number }) {
+  const R = 26;
+  const C = 2 * Math.PI * R;
+  const none = done === 0;
+  const pct = total ? done / total : 0;
+  return (
+    <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r={R} className={none ? "rg-miss" : "rg-track"} />
+      {!none && (
+        <circle
+          cx="32"
+          cy="32"
+          r={R}
+          className="rg-found"
+          strokeDasharray={`${C * pct} ${C}`}
+          transform="rotate(-90 32 32)"
+        />
+      )}
+      <text x="32" y="37" textAnchor="middle" className={none ? "rg-num miss" : "rg-num"}>
+        {done}/{total}
+      </text>
+    </svg>
+  );
+}
+
+
 /* ---------- 4 sections ---------- */
 function ResultSections({ result }: { result: Result }) {
   const [panel, setPanel] = useState<Panel>(null);
@@ -125,16 +152,27 @@ function ResultSections({ result }: { result: Result }) {
   return (
     <>
       <section className="rs-card">
-        <h3>1 · Skills in the job description</h3>
-        <div className="rs-two">
-          <button className="rs-box ok" onClick={() => setPanel({ type: "found" })}>
-            <b>{matched.length}</b>
-            <span>Found in your resume · tap to open</span>
-          </button>
-          <button className="rs-box ms" onClick={() => setPanel({ type: "missing" })}>
-            <b>{missing.length}</b>
-            <span>Missing from your resume · tap to open</span>
-          </button>
+        <div className="rs-top">
+          <h3>2 · Where the gaps are</h3>
+          <div className="rs-legend">
+            <span><i className="sw found" />Found</span>
+            <span><i className="sw miss" />Missing</span>
+          </div>
+        </div>
+        <div className="rs-rings">
+          {gaps.map((g, i) => {
+            const t = g.matched.length + g.missing.length;
+            return (
+              <button
+                key={g.category}
+                className="rs-ring"
+                onClick={() => setPanel({ type: "gap", index: i })}
+              >
+                <Ring done={g.matched.length} total={t} />
+                <span>{g.category}</span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -230,6 +268,47 @@ function ResultSections({ result }: { result: Result }) {
   );
 }
 
+const WORD = "Skillora";
+const LINES = [
+  "Upload your resume. Check your eligibility. Match with the right job.",
+  "See exactly which skills you have and which ones to build next.",
+  "Built for freshers who want clear answers, not guesses.",
+  "From resume to role, in seconds.",
+];
+
+function Landing({ onStart }: { onStart: () => void }) {
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setI((n) => (n + 1) % LINES.length), 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div className="lp-hero">
+      <div className="lp-brand">
+        <img className="lp-mark" src="/skillora-mark.png" alt="" />
+        <h1 className="lp-word" aria-label={WORD}>
+          {WORD.split("").map((c, k) => (
+            <span key={k} style={{ animationDelay: `${0.3 + k * 0.09}s` }}>{c}</span>
+          ))}
+        </h1>
+      </div>
+
+      <p key={i} className="lp-line">{LINES[i]}</p>
+
+      <div className="lp-steps">
+        <button className="lp-step" onClick={onStart}><b>1. Upload</b><span>Add your resume</span></button>
+        <button className="lp-step" onClick={onStart}><b>2. Match</b><span>Paste the job</span></button>
+        <button className="lp-step" onClick={onStart}><b>3. Improve</b><span>Fix the gaps</span></button>
+      </div>
+
+      <button className="lp-btn" onClick={onStart}>Check my resume</button>
+    </div>
+  );
+}
+
+
 /* ---------- main App ---------- */
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -237,6 +316,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<Result | null>(null);
+  const [started, setStarted] = useState(false);
+  if (!started) return <Landing onStart={() => setStarted(true)} />;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -612,7 +612,7 @@ textarea:focus {
 .lp-word {
     margin: 0;
     display: flex;
-    font-size: clamp(2.2rem, 8vw, 3.6rem);
+    font-size: clamp(2.42rem, 8.8vw, 3.96rem);
     font-weight: 600;
     color: #fff
 }
@@ -780,5 +780,56 @@ textarea:focus {
     to {
         transform: scale(6);
         opacity: 0
+    }
+}
+
+/* headline + typing description */
+.lp-headline {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .2px
+}
+
+.lp-desc {
+    position: relative;
+    margin: 0;
+    max-width: 560px;
+    font-size: .95rem;
+    line-height: 1.7;
+    font-weight: 400;
+    color: #b9c7ee;
+    text-align: center
+}
+
+.lp-ghost {
+    visibility: hidden
+}
+
+.lp-type {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: center
+}
+
+.lp-caret {
+    display: inline-block;
+    margin-left: 1px;
+    color: #38bdf8;
+    animation: lpBlink 1s steps(1) infinite
+}
+
+@keyframes lpBlink {
+    50% {
+        opacity: 0
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .lp-caret {
+        animation: none
     }
 }

@@ -268,21 +268,23 @@ function ResultSections({ result }: { result: Result }) {
   );
 }
 
+//skillora 
 const WORD = "Skillora";
-const LINES = [
-  "Upload your resume. Check your eligibility. Match with the right job.",
-  "See exactly which skills you have and which ones to build next.",
-  "Built for freshers who want clear answers, not guesses.",
-  "From resume to role, in seconds.",
-];
+const HEADLINE = "Know Your Match. Bridge Your Gaps. Get Career-Ready.";
+const DESC =
+  "See where you stand, discover what's missing, and get smarter insights to move closer to your dream job. Turn your potential into progress with personalized recommendations that help you stand out.";
 
 function Landing({ onStart }: { onStart: () => void }) {
-  const [i, setI] = useState(0);
+  const [n, setN] = useState(() =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? DESC.length : 0
+  );
 
   useEffect(() => {
-    const t = setInterval(() => setI((n) => (n + 1) % LINES.length), 3000);
-    return () => clearInterval(t);
-  }, []);
+    if (n >= DESC.length) return;
+    const t = setTimeout(() => setN(n + 1), 28);
+    return () => clearTimeout(t);
+  }, [n]);
+
 
   return (
     <div className="lp-hero">
@@ -295,19 +297,20 @@ function Landing({ onStart }: { onStart: () => void }) {
         </h1>
       </div>
 
-      <p key={i} className="lp-line">{LINES[i]}</p>
+      <p className="lp-headline">{HEADLINE}</p>
 
-      <div className="lp-steps">
-        <button className="lp-step" onClick={onStart}><b>1. Upload</b><span>Add your resume</span></button>
-        <button className="lp-step" onClick={onStart}><b>2. Match</b><span>Paste the job</span></button>
-        <button className="lp-step" onClick={onStart}><b>3. Improve</b><span>Fix the gaps</span></button>
-      </div>
+      <p className="lp-desc" aria-label={DESC}>
+        <span className="lp-ghost" aria-hidden="true">{DESC}</span>
+        <span className="lp-type" aria-hidden="true">
+          {DESC.slice(0, n)}
+          <span className="lp-caret">|</span>
+        </span>
+      </p>
 
       <button className="lp-btn" onClick={onStart}>Check my resume</button>
     </div>
   );
 }
-
 
 /* ---------- main App ---------- */
 export default function App() {

@@ -335,7 +335,7 @@ function Landing({ onStart }: { onStart: () => void }) {
       <div className="lp-split">
         <div className="lp-left">
           <div className="lp-brand">
-            <span className="lp-mark" aria-hidden="true" />
+            <img src="/final_logo.png" alt="Skillora logo" className="lp-mark" />
             <h1 className="lp-word" aria-label={WORD}>
               {WORD.split("").map((c, k) => (
                 <span key={k} style={{ animationDelay: `${0.3 + k * 0.09}s` }}>{c}</span>
@@ -353,7 +353,7 @@ function Landing({ onStart }: { onStart: () => void }) {
             </span>
           </p>
 
-          <button className="lp-btn" onClick={onStart}>Check my resume</button>
+          <button className="lp-btn" onClick={onStart}>Analyze Your Resume</button>
         </div>
 
         <div className="lp-right">

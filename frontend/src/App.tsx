@@ -330,38 +330,41 @@ function Landing({ onStart }: { onStart: () => void }) {
     return () => clearTimeout(t);
   }, [n]);
 
-
   return (
     <div className="lp-hero">
-      <div className="lp-brand">
-        <img className="lp-mark" src="/skillora-mark.png" alt="" />
-        <h1 className="lp-word" aria-label={WORD}>
-          {WORD.split("").map((c, k) => (
-            <span key={k} style={{ animationDelay: `${0.3 + k * 0.09}s` }}>{c}</span>
-          ))}
-        </h1>
+      <div className="lp-split">
+        <div className="lp-left">
+          <div className="lp-brand">
+            <span className="lp-mark" aria-hidden="true" />
+            <h1 className="lp-word" aria-label={WORD}>
+              {WORD.split("").map((c, k) => (
+                <span key={k} style={{ animationDelay: `${0.3 + k * 0.09}s` }}>{c}</span>
+              ))}
+            </h1>
+          </div>
+
+          <p className="lp-headline">{HEADLINE}</p>
+
+          <p className="lp-desc" aria-label={DESC}>
+            <span className="lp-ghost" aria-hidden="true">{DESC}</span>
+            <span className="lp-type" aria-hidden="true">
+              {DESC.slice(0, n)}
+              <span className="lp-caret">|</span>
+            </span>
+          </p>
+
+          <button className="lp-btn" onClick={onStart}>Check my resume</button>
+        </div>
+
+        <div className="lp-right">
+          <ResumePreview />
+        </div>
       </div>
-
-      <p className="lp-headline">{HEADLINE}</p>
-
-      <p className="lp-desc" aria-label={DESC}>
-        <span className="lp-ghost" aria-hidden="true">{DESC}</span>
-        <span className="lp-type" aria-hidden="true">
-          {DESC.slice(0, n)}
-          <span className="lp-caret">|</span>
-        </span>
-      </p>
-
-      <div className="lp-row">
-        <div className="lp-side"><ResumePreview /></div>
-        <button className="lp-btn" onClick={onStart}>Check my resume</button>
-        <div className="lp-side" />
-      </div>
-
-
     </div>
   );
 }
+
+
 
 /* ---------- main App ---------- */
 export default function App() {

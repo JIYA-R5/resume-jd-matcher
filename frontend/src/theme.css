@@ -1075,3 +1075,66 @@ textarea:focus {
         border-right: 0
     }
 }
+
+/* ===== left text + right resume card ===== */
+.lp-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 48px;
+    width: 100%;
+    max-width: 1100px
+}
+
+.lp-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    text-align: left
+}
+
+.lp-left .lp-brand {
+    justify-content: flex-start
+}
+
+.lp-right {
+    display: flex;
+    justify-content: center
+}
+
+@media (max-width:820px) {
+    .lp-split {
+        grid-template-columns: 1fr
+    }
+
+    .lp-left {
+        align-items: center;
+        text-align: center
+    }
+
+    .lp-left .lp-brand {
+        justify-content: center
+    }
+
+    .lp-right {
+        display: none
+    }
+}
+
+/* resume card: clockwise +7deg */
+.resume-card {
+    transform: rotateY(14deg) rotateZ(7deg)
+}
+
+@keyframes rsFloat {
+
+    0%,
+    100% {
+        transform: rotateY(14deg) rotateZ(7deg) translateY(0)
+    }
+
+    50% {
+        transform: rotateY(14deg) rotateZ(7deg) translateY(-8px)
+    }
+}

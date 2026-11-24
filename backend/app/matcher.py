@@ -119,8 +119,8 @@ def match(resume_text: str, jd_text: str) -> dict:
     missing = sorted(jd_skills - resume_skills)
     coverage = len(matched) / len(jd_skills) if jd_skills else None
 
-    final = semantic if coverage is None else 0.6 * semantic + 0.4 * coverage
-
+    final = semantic if coverage is None else 0.25 * semantic + 0.75 * coverage
+    
     final_pct = round(final * 100, 1)
     roles = suggest_roles(resume_skills)
 

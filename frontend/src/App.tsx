@@ -425,9 +425,20 @@ export default function App() {
           alignItems: "center",
         }}
       >
-        <h1>Resume Matcher</h1>
+        <div className="app-left">
+          <button className="back-btn" onClick={() => setStarted(false)} aria-label="Back">
+            ← Back
+          </button>
+
+          <div className="app-brand">
+            <img src="/final_logo.png" alt="Skillora logo" className="app-logo" />
+            <span className="app-name">Skillora</span>
+          </div>
+        </div>
+
         <ThemeToggle />
       </header>
+
 
       <form className="card" onSubmit={handleSubmit}>
         <h3>📄 Upload Resume</h3>

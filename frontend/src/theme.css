@@ -1,27 +1,27 @@
 :root {
-    --violet-500: #7c4dff;
-    --purple-500: #8b5cf6;
-    --magenta-500: #c026d3;
-    --pink-400: #e879f9;
+    --violet-500: #3b82f6;
+    --purple-500: #2563eb;
+    --magenta-500: #1d4ed8;
+    --pink-400: #60a5fa;
     --success: #22c55e;
     --warn: #f59e0b;
-    --grad-brand: linear-gradient(135deg, #7c4dff 0%, #b13cf0 60%, #d946ef 100%);
+    --grad-brand: linear-gradient(135deg, #3b82f6 0%, #2563eb 60%, #1d4ed8 100%);
     --radius: 20px;
 }
 
 :root,
 :root[data-theme="light"] {
-    --bg: radial-gradient(1200px 600px at 10% -10%, #e4defc 0%, transparent 60%),
-        radial-gradient(900px 500px at 100% 0%, #f3d9fb 0%, transparent 55%),
-        #f1f0fb;
-    --text: #2b2160;
-    --text-muted: #6b6a8f;
-    --card-bg: rgba(139, 92, 246, 0.10);
-    --card-border: rgba(124, 77, 255, 0.28);
-    --card-shadow: 0 10px 40px rgba(124, 77, 255, 0.18);
-    --track: rgba(124, 77, 255, 0.15);
-    --chip-ok-bg: rgba(124, 77, 255, 0.10);
-    --chip-ok-border: rgba(124, 77, 255, 0.40);
+    --bg: radial-gradient(1200px 600px at 10% -10%, #dbeafe 0%, transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, #e0f2fe 0%, transparent 55%),
+        #eff6ff;
+    --text: #0f1d3a;
+    --text-muted: #5b6b8f;
+    --card-bg: rgba(59, 130, 246, 0.10);
+    --card-border: rgba(59, 130, 246, 0.28);
+    --card-shadow: 0 10px 40px rgba(59, 130, 246, 0.18);
+    --track: rgba(59, 130, 246, 0.15);
+    --chip-ok-bg: rgba(59, 130, 246, 0.10);
+    --chip-ok-border: rgba(59, 130, 246, 0.40);
     --chip-miss-bg: rgba(245, 158, 11, 0.12);
     --chip-miss-border: rgba(245, 158, 11, 0.50);
     --input-bg: rgba(255, 255, 255, 0.65);
@@ -29,21 +29,21 @@
 }
 
 :root[data-theme="dark"] {
-    --bg: radial-gradient(1000px 600px at 15% -10%, #3b1a7a 0%, transparent 60%),
-        radial-gradient(900px 500px at 100% 10%, #5a1a78 0%, transparent 55%),
-        #0b0814;
-    --text: #f3f0ff;
-    --text-muted: #a79fcf;
+    --bg: radial-gradient(1000px 600px at 15% -10%, #0b2a6b 0%, transparent 60%),
+        radial-gradient(900px 500px at 100% 10%, #0a1f4d 0%, transparent 55%),
+        #05070f;
+    --text: #f0f6ff;
+    --text-muted: #9fb0d9;
     --card-bg: rgba(255, 255, 255, 0.06);
-    --card-border: rgba(167, 139, 250, 0.28);
+    --card-border: rgba(96, 165, 250, 0.28);
     --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, .08);
     --track: rgba(255, 255, 255, 0.10);
-    --chip-ok-bg: rgba(124, 77, 255, 0.18);
-    --chip-ok-border: rgba(167, 139, 250, 0.55);
+    --chip-ok-bg: rgba(59, 130, 246, 0.18);
+    --chip-ok-border: rgba(96, 165, 250, 0.55);
     --chip-miss-bg: rgba(245, 158, 11, 0.14);
     --chip-miss-border: rgba(245, 158, 11, 0.55);
     --input-bg: rgba(255, 255, 255, 0.05);
-    --glow: 0 0 24px rgba(168, 85, 247, 0.55);
+    --glow: 0 0 24px rgba(59, 130, 246, 0.55);
 }
 
 * {

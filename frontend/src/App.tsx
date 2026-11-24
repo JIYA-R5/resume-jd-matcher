@@ -440,35 +440,44 @@ export default function App() {
       </header>
 
 
-      <form className="card" onSubmit={handleSubmit}>
-        <h3>📄 Upload Resume</h3>
-        <input
-          type="file"
-          accept=".pdf,.docx,.txt"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-        />
+      <div className="app-grid">
+        {/* LEFT: upload + job description */}
+        <form className="card left-card" onSubmit={handleSubmit}>
+          <h3>📄 Upload Resume</h3>
+          <input
+            type="file"
+            accept=".pdf,.docx,.txt"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
 
-        <h3>📝 Job Description</h3>
-        <textarea
-          rows={8}
-          style={{ width: "100%" }}
-          placeholder="Job description yahan paste karo..."
-          value={jd}
-          onChange={(e) => setJd(e.target.value)}
-        />
+          <h3>📝 Job Description</h3>
+          <textarea
+            placeholder="Job description yahan paste karo..."
+            value={jd}
+            onChange={(e) => setJd(e.target.value)}
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Analyzing..." : "Match Karo"}
-        </button>
-        {error && <p className="tip">⚠️ {error}</p>}
-      </form>
+          <button type="submit" disabled={loading}>
+            {loading ? "Analyzing..." : "Match Karo"}
+          </button>
+          {error && <p className="tip">⚠️ {error}</p>}
+        </form>
 
-      {result && (
-        <>
-          <ScoreCard score={result.score} metrics={result.metrics} />
-          <ResultSections result={result} />
-        </>
-      )}
+        {/* RIGHT: score + results */}
+        <div className="right-col">
+          {result ? (
+            <>
+              <ScoreCard score={result.score} metrics={result.metrics} />
+              <ResultSections result={result} />
+            </>
+          ) : (
+            <div className="card right-empty">
+              <h3>🎯 Match Score</h3>
+              <p>Resume upload karo, job description paste karo, phir "Match Karo" dabao.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

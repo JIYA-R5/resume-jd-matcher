@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ScoreCard from "./components/ScoreCard";
 import ThemeToggle from "./components/ThemeToggle";
+import { BreakdownCard, AnalysisRows } from "./AnalysisCards";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
@@ -466,12 +467,13 @@ export default function App() {
           {error && <p className="tip">⚠️ {error}</p>}
         </form>
 
+
         {/* RIGHT: score + results */}
         <div className="right-col">
           {result ? (
             <>
               <ScoreCard score={result.score} metrics={result.metrics} />
-              <ResultSections result={result} />
+              <BreakdownCard result={result} />
             </>
           ) : (
             <div className="card right-empty">
@@ -481,6 +483,8 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {result && <AnalysisRows result={result} />}
     </div>
   );
 }

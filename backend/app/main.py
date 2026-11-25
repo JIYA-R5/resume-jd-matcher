@@ -1,9 +1,9 @@
+from .analysis import extra_analysis
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from .matcher import match
 from .parser import extract_text
-
 app = FastAPI(title="Resume JD Matcher", version="2.0.0")
 
 app.add_middleware(
@@ -49,4 +49,9 @@ async def match_endpoint(resume: UploadFile = File(...), jd_text: str = Form(...
         )
 
     return match(resume_text, jd_text)
+missing = result.get("missing", [])
 
+return {
+    **result,
+    **extra_analysis(resume_text, jd_text, missing)
+}

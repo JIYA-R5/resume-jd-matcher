@@ -48,10 +48,10 @@ async def match_endpoint(resume: UploadFile = File(...), jd_text: str = Form(...
             detail="Job description is too short. Please provide at least 30 characters.",
         )
 
-    return match(resume_text, jd_text)
-missing = result.get("missing", [])
+        result = match(resume_text, jd_text)
+    missing = result.get("missing", [])
 
-return {
-    **result,
-    **extra_analysis(resume_text, jd_text, missing)
-}
+    return {
+        **result,
+        **extra_analysis(resume_text, jd_text, missing),
+    }

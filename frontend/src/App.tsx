@@ -332,6 +332,9 @@ function Landing({ onStart }: { onStart: () => void }) {
 
   return (
     <div className="lp-hero">
+      <div className="lp-topbar">
+        <ThemeToggle />
+      </div>
       <div className="lp-split">
         <div className="lp-left">
           <div className="lp-brand">

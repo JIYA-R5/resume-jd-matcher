@@ -11,20 +11,20 @@
 
 :root,
 :root[data-theme="light"] {
-    --bg: radial-gradient(1200px 600px at 10% -10%, #dbeafe 0%, transparent 60%),
-        radial-gradient(900px 500px at 100% 0%, #e0f2fe 0%, transparent 55%),
-        #eff6ff;
-    --text: #0f1d3a;
-    --text-muted: #5b6b8f;
-    --card-bg: rgba(59, 130, 246, 0.10);
-    --card-border: rgba(59, 130, 246, 0.28);
-    --card-shadow: 0 10px 40px rgba(59, 130, 246, 0.18);
+    --bg: radial-gradient(1100px 600px at 100% 0%, #bcdcff 0%, transparent 60%),
+        radial-gradient(900px 500px at 0% 0%, #e6f2ff 0%, transparent 55%),
+        #f5faff;
+    --text: #0b1b3f;
+    --text-muted: #51638a;
+    --card-bg: rgba(255, 255, 255, 0.80);
+    --card-border: rgba(59, 130, 246, 0.22);
+    --card-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
     --track: rgba(59, 130, 246, 0.15);
     --chip-ok-bg: rgba(59, 130, 246, 0.10);
-    --chip-ok-border: rgba(59, 130, 246, 0.40);
+    --chip-ok-border: rgba(59, 130, 246, 0.35);
     --chip-miss-bg: rgba(245, 158, 11, 0.12);
     --chip-miss-border: rgba(245, 158, 11, 0.50);
-    --input-bg: rgba(255, 255, 255, 0.65);
+    --input-bg: rgba(255, 255, 255, 0.95);
     --glow: 0 0 0 rgba(0, 0, 0, 0);
 }
 
@@ -1247,4 +1247,92 @@ textarea:focus {
     .app-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===== toggle position on intro page (the only thing that shows in both modes) ===== */
+.lp-hero {
+    position: relative;
+}
+
+.lp-topbar {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    z-index: 5;
+}
+
+/* ===== LIGHT MODE ONLY: intro page ===== */
+:root[data-theme="light"] .lp-hero {
+    background:
+        radial-gradient(900px 600px at 100% 0%, #bcdcff 0%, transparent 60%),
+        radial-gradient(700px 500px at 0% 0%, #e6f2ff 0%, transparent 55%),
+        #f5faff !important;
+}
+
+:root[data-theme="light"] .lp-word,
+:root[data-theme="light"] .lp-word span,
+:root[data-theme="light"] .lp-headline {
+    color: #0b1b3f !important;
+}
+
+:root[data-theme="light"] .lp-desc,
+:root[data-theme="light"] .lp-type {
+    color: #51638a !important;
+}
+
+:root[data-theme="light"] .lp-caret {
+    color: #2563eb;
+}
+
+:root[data-theme="light"] .resume-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+    color: #0b1b3f !important;
+    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.22) !important;
+}
+
+:root[data-theme="light"] .lp-mark,
+:root[data-theme="light"] .app-logo {
+    filter: brightness(2.3) saturate(1.3);
+    border-radius: 14px;
+}
+
+/* ===== LIGHT MODE ONLY: inner page ===== */
+:root[data-theme="light"] .card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+    color: #0b1b3f;
+}
+
+:root[data-theme="light"] .card h3,
+:root[data-theme="light"] .card p {
+    color: #0b1b3f;
+}
+
+:root[data-theme="light"] .left-card textarea,
+:root[data-theme="light"] .left-card input[type="file"] {
+    background: #ffffff;
+    color: #0b1b3f;
+    border: 1px solid rgba(59, 130, 246, 0.30);
+}
+
+:root[data-theme="light"] .left-card button[type="submit"] {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+:root[data-theme="light"] .app-name {
+    color: #0b1b3f;
+}
+
+:root[data-theme="light"] .back-btn {
+    color: #0b1b3f;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.30);
 }
